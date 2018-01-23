@@ -1,0 +1,513 @@
+<html>
+
+<head>
+    <title>Sidechain</title>
+    <style>
+        .ul_font_size {
+            font-size: 25px;
+            text-align: center;
+        }
+
+        .row-class {
+            margin-bottom: 5px;
+            margin-top: 20px;
+            background: white;
+            height: 45px;
+            padding-top: 10px
+        }
+
+        .th-style {
+            font-size: 22px;
+            text-align: center;
+            color: black;
+            font-size: 20px;
+        }
+
+        .panel.panel-info {
+            position: relative;
+            top: 90px;
+        }
+
+        .send-btn {
+            margin-bottom: 10px !important;
+            margin-right: 13px;
+        }
+
+        .send-btn-div {
+            text-align: right;
+            margin-top: 10;
+        }
+
+        input#login-submit{
+            background: skyblue;
+    position: relative;
+    top: 80px;
+    width: 96px;
+    left: 70px;
+        }
+
+        input#passphrase{
+            position: relative;
+    top: 40px;
+        }
+        .panel.panel-login{
+            position: relative;
+    right: 50px;
+    top: 65px;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="loggedOut" >
+
+        <div class="container" style="padding-top: 50px;">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="panel panel-login">
+
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <form id="login-form" role="form" style="display: block;">
+                                        <div class="form-group">
+                                            <input type="text" name="passphrase" id="passphrase" tabindex="1" class="form-control" placeholder="passphrase" value="">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-6 col-sm-offset-3">
+                                                    <input type="button" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
+                                                   <!--  <div class="btn-group btn-group-lg" role="group" ></div>
+ -->
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="loggedIn" style="display:none;">
+        <div style="background-color: darkgray;">
+            <ul class="nav nav-tabs" style="background-color: darkgray;">
+                <div class="row row-class" style="background-color: darkgray;">
+                    <div class="col-md-3">
+                        <li class="ul_font_size" value="blockchain_div_id">Blockchain</li>
+                    </div>
+                    <div class="col-md-3">
+                        <li class="ul_font_size" value="transation_div_id">Transaction</li>
+                    </div>
+                    <div class="col-md-3">
+                        <li class="ul_font_size" value="delegate_div_id">Delegate</li>
+                    </div>
+                    <div class="col-md-3">
+                        <li class="ul_font_size" value="profile_div_id">Profile</li>
+                    </div>
+                </div>
+            </ul>
+        </div>
+        <div id="blockchain_div_id">
+            <div>
+                <div class="table-responsive">
+                    <table class="table table-striped" id="blockTable">
+                        <tr>
+                            <th class=".th-style">Height</th>
+                            <th class=".th-style">Block Id</th>
+                            <th class=".th-style">Transactions</th>
+                            <th class=".th-style">Time</th>
+                        </tr>
+                    </table>
+                    <!-- <span><i id="preBlock">&lt;&lt;Pre</i><p id="pageValue"><p><i id="nextBlock">Next&gt;&gt;</i></span> -->
+                </div>
+            </div>
+        </div>
+        <div id="transation_div_id">
+            <div>
+                <div class="table-responsive">
+                    <div class="send-btn-div">
+                        <button type="button" class="btn btn-primary send-btn" data-toggle="modal" data-target="#sendModalCenter">
+  Send
+</button>
+                    </div>
+                    <table class="table table-striped" id="trsTable">
+                        <tr>
+                            <th class=".th-style">Id</th>
+                            <th class=".th-style">Sender</th>
+                            <th class=".th-style">Recipient</th>
+                            <th class=".th-style">Amount</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="sendModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Send Transaction</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="send-form">
+                <form >
+                    <div class="form-group">
+                        <label for="email">Recipient Address:</label>
+                        <input id="recipientInput" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="pwd">Amount:</label>
+                        <input id="amountInput" type="text" class="form-control">
+                    </div>
+                </form>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary send-trs-btn">Send</button>
+      </div>
+    </div> 
+  </div>
+</div>
+
+     
+        <!-- <div id="send_div_id" style="display:none;">
+            
+        </div> -->
+        <div id="delegate_div_id">
+            Delegate
+        </div>
+        <div id="profile_div_id">
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Account Details</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class=" col-md-9 col-lg-9 ">
+                                <table class="table table-user-information">
+                                    <tbody>
+                                        <tr>
+                                            <td>Public Key:</td>
+                                            <td id="publicKey"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Address:</td>
+                                            <td id="address"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Balance:</td>
+                                            <td id="avlBal"></td>
+                                        </tr>
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            var UserInfo = {};
+            
+            window.liFields = $(".ul_font_size");
+            $.each(liFields, function(index, liField) {
+                $(liFields[index]).on("click", activateAndDeactivate);
+            });
+            var DAPP_ID = window.location.pathname.split('/')[2];
+            var BASE_URL = '/api/dapps/' + DAPP_ID + '/api';
+            var COUNT_PER_PAGE = 10;
+            var Height= 0;
+
+            var blockPage = {
+                limit:10,
+                offset:0,
+                currentPage:1,
+                height:0
+            }
+
+            $("#login-submit").click(function() {
+                var passphrase = $("#passphrase").val();
+                if (!passphrase || passphrase === '') {
+                    return;
+                }
+                var payload = {
+                    "secret": passphrase
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: BASE_URL + '/openAccount',
+                    data: payload,
+                    dataType: 'json',
+                    success: function(ret) {
+                        if (ret.success) {
+                            UserInfo = ret.response.account;
+                            UserInfo.secret = passphrase;
+                            $('.loggedOut').hide();
+                            $('.loggedIn').show();
+                            console.log(UserInfo);
+                            resetDefaultColor();
+                            onBlock();
+                            init();
+                            /* UserInfo = { 
+                            "address": "",
+                            "publicKey": "",
+                            "secret": "",
+                            "balance": {
+                                "BEL": 0
+                            },
+                            "u_balance": {
+                                "BEL": 0
+                            }
+                       }*/
+                        }
+                    }
+                });
+            });
+
+           /* function initBlockPage(){
+                blockPage.currentPage = 1;
+                blockPage.totalPage = parseInt(blockPage.height/blockPage.limit) + (blockPage.height%blockPage.limit) > 0?1:0;
+            }
+            function preBlock(){
+                if(blockPage.offset == 0){
+                    return;
+                }
+                blockPage.offset = blockPage.offset - 1;
+                blockPage.currentPage = 
+            }
+
+            function setBlockPageHtml(){
+                $('#pTest').text(blockPage.currentPage+'/'+blockPage.totalPage);
+            }*/
+
+            function onBlock(offset, limit) {
+                limit = limit || 10;
+                offset = offset || 0;
+                $.ajax({
+                    type: 'GET',
+                    url: BASE_URL + '/blocks?limit=' + limit + '&offset=' + offset + '&orderBy=height:desc',
+                    dataType: 'json',
+                    success: function(ret) {
+                        if (ret.success) {
+                            var $table = $('#blockTable');
+                            $table.find('tr:not(:first)').remove();
+                            console.log(ret)
+                            /*blockPage.height = (offset == 0 && ret.response.length > 0)?ret.response[0].b_height : blockPage.height;*/
+                            for (var i in ret.response) {
+                                var block = ret.response[i];
+                                var tr = '<tr><td>' + block.b_height + '</td>' + '<td>' + block.b_id + '</td>' + '<td>' + block.b_count + '</td>' + '<td>' + '--' + '</td></tr>';
+                                $table.append(tr);
+                            }
+                        }
+                    }
+                });
+            }
+            //
+            //
+            function onTabChange(tab) {
+                console.log(tab);
+                switch (tab) {
+                    case 'blockchain_div_id':
+                        {
+                            onBlock();
+                        }
+                    case 'transation_div_id':
+                        {
+                            onTransactions();
+                        }
+                    case 'delegate_div_id':
+                        {
+
+                        }
+                    case 'profile_div_id':
+                        {
+                            onProfile();
+                        }
+                }
+            }
+
+            function init() {
+                $("#blockchain_div_id").show();
+            }
+
+            function onTransactions() {
+                $.ajax({
+                    type: 'GET',
+                    url: BASE_URL + '/transactions',
+                    dataType: 'json',
+                    success: function(ret) {
+                        if (ret.success) {
+                            var $table = $('#trsTable');
+                            $table.find('tr:not(:first)').remove();
+                            console.log(ret)
+                            for (var i in ret.response) {
+                                console.log(ret)
+                                var trs = ret.response[i];
+                                var amount = trs.amount ? trs.amount / 100000000 : 0;
+                                var tr = '<tr><td>' + trs.id + '</td>' + '<td>' + trs.senderId + '</td>' + '<td>' + trs.recipientId + '</td>' + '<td>' + amount + '</td></tr>';
+                                $table.append(tr);
+                            }
+                        }
+                    }
+                });
+            }
+
+            function onDelegate() {
+
+            }
+
+            function onProfile() {
+                var secretKey = UserInfo.secret;
+                var payload = {
+                    "secret": secretKey
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: BASE_URL + '/openAccount',
+                    data: payload,
+                    dataType: 'json',
+                    success: function(ret) {
+                        if (ret.success) {
+                            UserInfo = ret.response.account;
+                            UserInfo.secret = secretKey;
+                            var bal = (UserInfo.balance.LISK && UserInfo.balance.LISK > 0) ? UserInfo.balance.LISK / 100000000 + '(BEL)' : 0 + '(BEL)';
+                            console.log('Profile', bal)
+                            $('#publicKey').html(UserInfo.publicKey);
+                            $('#address').html(UserInfo.address);
+                            $('#avlBal').html(bal);
+                        }
+                    }
+                });
+            }
+
+
+            function activateAndDeactivate() {
+                resetDefaultColor();
+                console.log("this-----", this);
+                onTabChange($(this).attr('value') + '');
+                //console.log("value:---", this.val());
+                console.log("value:---", $(this).attr('value'));
+                var divToShow = $(this).attr('value');
+                $("#" + divToShow).show();
+                console.log("parent:----", $(this).parent());
+                $(this).css("color", "#2d556f");
+            }
+
+            function resetDefaultColor() {
+                $.each(liFields, function(index, liField) {
+                    $(this).css("color", "black");
+                    var divToHide = $(liField).attr("value");
+                    $("#" + divToHide).hide();
+                });
+            }
+
+            
+            $('.send-trs-btn').click(function (){
+                var amount = $('#amountInput').val();
+                var recipientId = $('#recipientInput').val();
+                if(!amount || amount === '' || !recipientId || recipientId === ''){
+                    return;
+                }
+                if(isNaN(amount)){
+                    return;
+                }
+                amount = parseInt(amount);
+                var payload = {
+                    token: "LISK",
+                    secret: UserInfo.secret,
+                    amount: amount*100000000,
+                    recipientId: recipientId
+                }
+                $.ajax({
+                    type: 'PUT',
+                    url: BASE_URL + '/transaction',
+                    data: payload,
+                    dataType: 'json',
+                    success: function(ret) {
+                        if (ret.success) {
+                            $('#sendModalCenter').modal('hide');
+                            onTransactions();
+                        }
+                    }
+                });
+
+            })
+
+            $('nextBlock').click(function (){})
+            $('preBlock').click(function (){})
+
+            function timeFilter(time){
+                if(!time || time == 0){
+                    return '-';
+                }
+                
+                var d = new Date(Date.UTC(2016, 4, 24, 17, 0, 0, 0));
+                var t = parseInt(d.getTime() / 1000);
+
+                time = new Date((time + t) * 1000);
+
+                var currentTime = new Date().getTime();
+                var diffTime = (currentTime - time.getTime()) / 1000;
+
+                var currentTime = new Date().getTime();
+                var diffTime = (currentTime - time) / 1000;
+                
+                if (diffTime < 60) {
+                    return Math.floor(diffTime) + ' sec ago';
+                }
+                if (Math.floor(diffTime / 60) <= 1) {
+                    return Math.floor(diffTime / 60) + ' min ago';
+                }
+                if ((diffTime / 60) < 60) {
+                    return Math.floor(diffTime / 60) + ' mins ago';
+                }
+                if (Math.floor(diffTime / 60 / 60) <= 1) {
+                    return Math.floor(diffTime / 60 / 60) + ' hour ago';
+                }
+                if ((diffTime / 60 / 60) < 24) {
+                    return Math.floor(diffTime / 60 / 60) + ' hours ago';
+                }
+                if (Math.floor(diffTime / 60 / 60 / 24) <= 1) {
+                    return Math.floor(diffTime / 60 / 60 / 24) + ' day ago';
+                }
+                if ((diffTime / 60 / 60 / 24) < 30) {
+                    return Math.floor(diffTime / 60 / 60 / 24) + ' days ago';
+                }
+                if (Math.floor(diffTime / 60 / 60 / 24 / 30) <= 1) {
+                    return Math.floor(diffTime / 60 / 60 / 24 / 30) + ' month ago';
+                }
+                if ((diffTime / 60 / 60 / 24 / 30) < 12) {
+                    return Math.floor(diffTime / 60 / 60 / 24 / 30) + ' months ago';
+                }
+                if (Math.floor((diffTime / 60 / 60 / 24 / 30 / 12)) <= 1) {
+                    return Math.floor(diffTime / 60 / 60 / 24 / 30 / 12) + ' year ago';
+                }
+
+                return Math.floor(diffTime / 60 / 60 / 24 / 30 / 12) + ' years ago';
+            }
+        });
+    </script>
+</body>
+
+</html>
