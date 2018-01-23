@@ -38,6 +38,39 @@
             margin-top: 10;
         }
 
+.d-inline{
+    text-align: right;
+}
+i#preBlock{
+    position: relative;
+    right: 170px;
+}
+i#nextBlock{
+    position: relative;
+    right: 44px;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+
+}
+p#pageValue{
+    position: relative;
+    bottom: 19px;
+    right: 126px;
+}
+p{
+    position: relative;
+    bottom: 48px;
+}
         input#login-submit{
             background: skyblue;
     position: relative;
@@ -127,7 +160,7 @@
                             <th class=".th-style">Time</th>
                         </tr>
                     </table>
-                    <!-- <span><i id="preBlock">&lt;&lt;Pre</i><p id="pageValue"><p><i id="nextBlock">Next&gt;&gt;</i></span> -->
+                    <div class ="d-inline"><i class="btn btn-info" id="preBlock">&lt;&lt;Pre</i><p id="pageValue"><p><i class=" btn-info" id="nextBlock">Next&gt;&gt;</i></div>
                 </div>
             </div>
         </div>
@@ -285,21 +318,33 @@
                 });
             });
 
-           /* function initBlockPage(){
+            function initBlockPage(){
+                console.log(blockPage.height, blockPage.limit)
                 blockPage.currentPage = 1;
-                blockPage.totalPage = parseInt(blockPage.height/blockPage.limit) + (blockPage.height%blockPage.limit) > 0?1:0;
+                blockPage.totalPage = Math.ceil(blockPage.height/blockPage.limit);
+                console.log(blockPage);
             }
-            function preBlock(){
-                if(blockPage.offset == 0){
+            $('#preBlock').click(function(){
+                if(blockPage.offset == 0 || blockPage.currentPage < 2){
                     return;
                 }
-                blockPage.offset = blockPage.offset - 1;
-                blockPage.currentPage = 
-            }
+                blockPage.offset = blockPage.offset - blockPage.limit;
+                blockPage.currentPage = blockPage.currentPage - 1;
+                onBlock(blockPage.offset, blockPage.limit);
+            })
+
+            $('#nextBlock').click(function(){
+                if(blockPage.currentPage == blockPage.totalPage){
+                    return;
+                }
+                blockPage.offset = blockPage.offset + blockPage.limit;
+                blockPage.currentPage = blockPage.currentPage + 1;
+                onBlock(blockPage.offset, blockPage.limit);
+            });
 
             function setBlockPageHtml(){
-                $('#pTest').text(blockPage.currentPage+'/'+blockPage.totalPage);
-            }*/
+                $('#pageValue').text(blockPage.currentPage+'/'+blockPage.totalPage);
+            }
 
             function onBlock(offset, limit) {
                 limit = limit || 10;
@@ -313,7 +358,13 @@
                             var $table = $('#blockTable');
                             $table.find('tr:not(:first)').remove();
                             console.log(ret)
-                            /*blockPage.height = (offset == 0 && ret.response.length > 0)?ret.response[0].b_height : blockPage.height;*/
+                            if(offset == 0 && ret.response.length > 0){
+                                console.log('Inside')
+                                blockPage.height = ret.response[0].b_height;
+                                console.log(blockPage.height, ret.response[0])
+                                initBlockPage();
+                            }
+                            setBlockPageHtml();
                             for (var i in ret.response) {
                                 var block = ret.response[i];
                                 var tr = '<tr><td>' + block.b_height + '</td>' + '<td>' + block.b_id + '</td>' + '<td>' + block.b_count + '</td>' + '<td>' + '--' + '</td></tr>';
@@ -330,7 +381,13 @@
                 switch (tab) {
                     case 'blockchain_div_id':
                         {
-                            onBlock();
+                            blockPage = {
+                                limit:10,
+                                offset:0,
+                                currentPage:1,
+                                height:0
+                            }
+                            onBlock(blockPage.offset, blockPage.limit);
                         }
                     case 'transation_div_id':
                         {
@@ -453,9 +510,6 @@
                 });
 
             })
-
-            $('nextBlock').click(function (){})
-            $('preBlock').click(function (){})
 
             function timeFilter(time){
                 if(!time || time == 0){
