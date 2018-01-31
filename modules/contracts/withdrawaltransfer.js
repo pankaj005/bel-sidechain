@@ -38,34 +38,34 @@ WithdrawalTransfer.prototype.getBytes = function (trs) {
 WithdrawalTransfer.prototype.apply = function (trs, sender, cb, scope) {
 	modules.blockchain.accounts.mergeAccountAndGet({
 		address: sender.address,
-		balance: {"LISK": -(trs.amount + trs.fee)}
+		balance: {"BEL": -(trs.amount + trs.fee)}
 	}, cb, scope);
 }
 
 WithdrawalTransfer.prototype.undo = function (trs, sender, cb, scope) {
 	modules.blockchain.accounts.undoMerging({
 		address: sender.address,
-		balance: {"LISK": -(trs.amount + trs.fee)}
+		balance: {"BEL": -(trs.amount + trs.fee)}
 	}, cb, scope);
 }
 
 WithdrawalTransfer.prototype.applyUnconfirmed = function (trs, sender, cb, scope) {
 	var sum = trs.amount + trs.fee;
 
-	if (sender.u_balance["LISK"] < sum) {
-		return cb("Account does not have enough LISK");
+	if (sender.u_balance["BEL"] < sum) {
+		return cb("Account does not have enough BEL");
 	}
 
 	modules.blockchain.accounts.mergeAccountAndGet({
 		address: sender.address,
-		u_balance: {"LISK": -(trs.amount + trs.fee)}
+		u_balance: {"BEL": -(trs.amount + trs.fee)}
 	}, cb, scope);
 }
 
 WithdrawalTransfer.prototype.undoUnconfirmed = function (trs, sender, cb, scope) {
 	modules.blockchain.accounts.undoMerging({
 		address: sender.address,
-		u_balance: {"LISK": -(trs.amount + trs.fee)}
+		u_balance: {"BEL": -(trs.amount + trs.fee)}
 	}, cb, scope);
 }
 

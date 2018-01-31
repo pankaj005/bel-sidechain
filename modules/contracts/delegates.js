@@ -61,8 +61,8 @@ Delegates.prototype.verify = function (trs, sender, cb, scope) {
 }
 
 Delegates.prototype.apply = function (trs, sender, cb, scope) {
-	if (sender.balance["LISK"] < trs.fee) {
-		return setImmediate(cb, "Account has no LISK: " + trs.id);
+	if (sender.balance["BEL"] < trs.fee) {
+		return setImmediate(cb, "Account has no BEL: " + trs.id);
 	}
 
 	async.series([
@@ -73,7 +73,7 @@ Delegates.prototype.apply = function (trs, sender, cb, scope) {
 		function (cb) {
 			modules.blockchain.accounts.mergeAccountAndGet({
 				address: sender.address,
-				balance: {"LISK": -trs.fee}
+				balance: {"BEL": -trs.fee}
 			}, cb, scope);
 		}
 	], cb);
@@ -87,15 +87,15 @@ Delegates.prototype.undo = function (trs, sender, cb, scope) {
 		function (cb) {
 			modules.blockchain.accounts.undoMerging({
 				address: sender.address,
-				balance: {"LISK": -trs.fee}
+				balance: {"BEL": -trs.fee}
 			}, cb, scope);
 		}
 	], cb);
 }
 
 Delegates.prototype.applyUnconfirmed = function (trs, sender, cb, scope) {
-	if (sender.u_balance["LISK"] < trs.fee) {
-		return setImmediate(cb, "Account has no LISK: " + trs.id);
+	if (sender.u_balance["BEL"] < trs.fee) {
+		return setImmediate(cb, "Account has no BEL: " + trs.id);
 	}
 
 	async.series([
@@ -106,7 +106,7 @@ Delegates.prototype.applyUnconfirmed = function (trs, sender, cb, scope) {
 		function (cb) {
 			modules.blockchain.accounts.mergeAccountAndGet({
 				address: sender.address,
-				u_balance: {"LISK": -trs.fee}
+				u_balance: {"BEL": -trs.fee}
 			}, cb, scope);
 		}
 	], cb);
@@ -120,7 +120,7 @@ Delegates.prototype.undoUnconfirmed = function (trs, sender, cb, scope) {
 		function (cb) {
 			modules.blockchain.accounts.undoMerging({
 				address: sender.address,
-				u_balance: {"LISK": -trs.fee}
+				u_balance: {"BEL": -trs.fee}
 			}, cb, scope);
 		}
 	], cb);

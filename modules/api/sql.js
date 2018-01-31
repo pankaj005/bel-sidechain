@@ -81,7 +81,7 @@ private.parseFields = function ($fields) {
  * Run SQL "select" query.
  * @param request - JSON Sql request.
  * @param map - Fields map.
- * @param {Sql~selectCallback} cb - Callback handles response from Lisk.
+ * @param {Sql~selectCallback} cb - Callback handles response from BEL.
  */
 Sql.prototype.select = function (request, map, cb) {
 	if (typeof map == 'function') {
@@ -113,7 +113,7 @@ Sql.prototype.select = function (request, map, cb) {
 /**
  * Insert values to Sql tables.
  * @param request - JSON Sql request to insert.
- * @param {Sql~insertCallback} cb - Callback handles response from Lisk.
+ * @param {Sql~insertCallback} cb - Callback handles response from BEL.
  */
 Sql.prototype.insert = function (request, cb) {
 	var message = {
@@ -135,7 +135,7 @@ Sql.prototype.insert = function (request, cb) {
 /**
  * Insert batch of items to Sql tables.
  * @param request - JSON Sql request to insert batch.
- * @param {Sql~batchCallback} cb - Callback handles response from Lisk.
+ * @param {Sql~batchCallback} cb - Callback handles response from BEL.
  */
 Sql.prototype.batch = function (request, cb) {
 	var message = {
@@ -156,7 +156,7 @@ Sql.prototype.batch = function (request, cb) {
 /**
  * Update values in Sql table.
  * @param request - JSON Sql request to update.
- * @param {Sql~updateCallback} cb - Callback handles response from Lisk.
+ * @param {Sql~updateCallback} cb - Callback handles response from BEL.
  */
 Sql.prototype.update = function (request, cb) {
 	var message = {
@@ -178,7 +178,7 @@ Sql.prototype.update = function (request, cb) {
  * Remove data from Sql table.
  *
  * @param request - JSON Sql request to remove data from Sql table.
- * @param {Sql~removeCallback} cb - Callback handles response from Lisk.
+ * @param {Sql~removeCallback} cb - Callback handles response from BEL.
  */
 Sql.prototype.remove = function (request, cb) {
 	var message = {

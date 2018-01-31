@@ -448,7 +448,7 @@ p{
                         if (ret.success) {
                             UserInfo = ret.response.account;
                             UserInfo.secret = secretKey;
-                            var bal = (UserInfo.balance.LISK && UserInfo.balance.LISK > 0) ? UserInfo.balance.LISK / 100000000 + '(BEL)' : 0 + '(BEL)';
+                            var bal = UserInfo.balance.BEL / 100000000 + '(BEL)';
                             console.log('Profile', bal)
                             $('#publicKey').html(UserInfo.publicKey);
                             $('#address').html(UserInfo.address);

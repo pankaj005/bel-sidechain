@@ -1,5 +1,5 @@
 /*
-	Lisk transactions API calls
+	BEL transactions API calls
  */
 
 var private = {}, self = null,
@@ -31,7 +31,7 @@ function Transactions(cb, _library) {
  * @param filter.limit - Limit of transactions.
  * @param filter.offset - Offset of transactions.
  * @param filter.orderBy - Field to sort transaction.
- * @param {Transactions~getTransactionsCallback} cb - Callback handles response from Lisk.
+ * @param {Transactions~getTransactionsCallback} cb - Callback handles response from BEL.
  */
 Transactions.prototype.getTransactions = function (filter, cb) {
 	var message = {
@@ -65,9 +65,10 @@ Transactions.prototype.getTransactions = function (filter, cb) {
 /**
  * Get transaction.
  * @param id - Id of transaction.
- * @param {Transactions~getTransaction} cb - Callback handles response from Lisk.
+ * @param {Transactions~getTransaction} cb - Callback handles response from BEL.
  */
 Transactions.prototype.getTransaction = function (id, cb) {
+	console.log(' :: transaction ::::::::::::::: ', id)
 	var message = {
 		call: "transactions#getTransaction",
 		args: {
@@ -88,7 +89,7 @@ Transactions.prototype.getTransaction = function (id, cb) {
 /**
  * Get unconfirmed transaction.
  * @param id - Id of unconfirmed transaction.
- * @param {Transactions~getUnconfirmedTransaction} cb - Callback handles response from Lisk.
+ * @param {Transactions~getUnconfirmedTransaction} cb - Callback handles response from BEL.
  */
 Transactions.prototype.getUnconfirmedTransaction = function (id, cb) {
 	var message = {
@@ -111,7 +112,7 @@ Transactions.prototype.getUnconfirmedTransaction = function (id, cb) {
 
 /**
  * Get list of unconfirmed transactions.
- * @param {Transactions~getUnconfirmedTransactions} cb - Callback handles response from Lisk.
+ * @param {Transactions~getUnconfirmedTransactions} cb - Callback handles response from BEL.
  */
 Transactions.prototype.getUnconfirmedTransactions = function (cb) {
 	var message = {
@@ -138,7 +139,7 @@ Transactions.prototype.getUnconfirmedTransactions = function (cb) {
  * @param publicKey - Public key of sender (optional).
  * @param secondSecret - Second secret if second signature enabled (optional).
  * @param requesterPublicKey - Public key of account if account under multisignature (optional).
- * @param {Transactions~addTransactionsCallback} cb - Callback handles response from Lisk.
+ * @param {Transactions~addTransactionsCallback} cb - Callback handles response from BEL.
  */
 Transactions.prototype.addTransactions = function (secret, amount, recipientId, publicKey, secondSecret, requesterPublicKey) {
 	var message = {

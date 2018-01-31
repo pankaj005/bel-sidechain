@@ -34,7 +34,7 @@ Transaction.prototype.create = function (data) {
 		senderId: data.sender.address,
 		senderPublicKey: data.sender.publicKey,
 		timestamp: timeHelper.getNow(),
-		token: "LISK",
+		token: "BEL",
 		asset: {}
 	};
 
@@ -45,9 +45,9 @@ Transaction.prototype.create = function (data) {
 
 	trsBytes = self.getBytes(trs);
 	trs.id = modules.api.crypto.getId(trsBytes);
-
+	console.log('Data ', data.id, trs.id);
 	trs.fee = private.types[trs.type].calculateFee.call(self, trs);
-
+	console.log(' Created trs :: ', trs);
 	return trs;
 }
 
@@ -75,7 +75,7 @@ Transaction.prototype.getBytes = function (trs, skipSignature) {
 		var assetSize = assetBytes ? assetBytes.length : 0;
 
 		var tokenBytes = [];
-		if (trs.token != "LISK") {
+		if (trs.token != "BEL") {
 			tokenBytes = new Buffer(trs.token, "utf8");
 		}
 
@@ -152,7 +152,7 @@ Transaction.prototype.process = function (trs, sender, cb) {
 		if (err || tx) {
 			return cb(err ? err.toString() : "Transaction is already unconfirmed");
 		}
-
+		console.log(':: finding :: ', trs.id);
 		modules.api.transactions.getTransaction(trs.id, function (err, data) {
 			if (err != "Transaction not found") {
 				return cb("Failed to process already confirmed transaction");
@@ -280,7 +280,7 @@ Transaction.prototype.save = function (trs, cb) {
 			fee: trs.fee,
 			signature: trs.signature,
 			blockId: trs.blockId,
-			token: trs.token == "LISK" ? null : trs.token
+			token: trs.token == "BEL" ? null : trs.token
 		}
 	}, function (err) {
 		if (err) {
@@ -371,7 +371,7 @@ Transaction.prototype.dbRead = function (row) {
 		fee: row.t_fee,
 		signature: row.t_signature,
 		blockId: row.t_blockId,
-		token: row.t_token || "LISK",
+		token: row.t_token || "BEL",
 		asset: {}
 	};
 

@@ -73,8 +73,8 @@ Token.prototype.apply = function (trs, sender, cb, scope) {
 	delete private.u_tokens[trs.asset.token.name];
 	private.tokens[trs.asset.token.name] = trs.id;
 
-	if (sender.balance["LISK"] < trs.fee) {
-		return setImmediate(cb, "Account does not have enouh LISK: " + trs.id);
+	if (sender.balance["BEL"] < trs.fee) {
+		return setImmediate(cb, "Account does not have enouh BEL: " + trs.id);
 	}
 
 	async.series([
@@ -90,7 +90,7 @@ Token.prototype.apply = function (trs, sender, cb, scope) {
 		function (cb) {
 			modules.blockchain.accounts.mergeAccountAndGet({
 				address: sender.address,
-				balance: {"LISK": -trs.fee}
+				balance: {"BEL": -trs.fee}
 			}, cb, scope);
 		}
 	], cb);
@@ -113,15 +113,15 @@ Token.prototype.undo = function (trs, sender, cb, scope) {
 		function (cb) {
 			modules.blockchain.accounts.undoMerging({
 				address: sender.address,
-				balance: {"LISK": -trs.fee}
+				balance: {"BEL": -trs.fee}
 			}, cb, scope);
 		}
 	], cb);
 }
 
 Token.prototype.applyUnconfirmed = function (trs, sender, cb, scope) {
-	if (sender.u_balance["LISK"] < trs.fee) {
-		return setImmediate(cb, "Account does not have enough LISK: " + trs.id);
+	if (sender.u_balance["BEL"] < trs.fee) {
+		return setImmediate(cb, "Account does not have enough BEL: " + trs.id);
 	}
 
 	if (private.u_tokens[trs.asset.token.name] || private.tokens[trs.asset.token.name]){
@@ -143,7 +143,7 @@ Token.prototype.applyUnconfirmed = function (trs, sender, cb, scope) {
 		function (cb) {
 			modules.blockchain.accounts.mergeAccountAndGet({
 				address: sender.address,
-				u_balance: {"LISK": -trs.fee}
+				u_balance: {"BEL": -trs.fee}
 			}, cb, scope);
 		}
 	], cb);
@@ -165,7 +165,7 @@ Token.prototype.undoUnconfirmed = function (trs, sender, cb, scope) {
 		function (cb) {
 			modules.blockchain.accounts.undoMerging({
 				address: sender.address,
-				u_balance: {"LISK": -trs.fee}
+				u_balance: {"BEL": -trs.fee}
 			}, cb, scope);
 		}
 	], cb);

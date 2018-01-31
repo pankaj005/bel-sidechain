@@ -65,7 +65,7 @@ private.popLastBlock = function (oldLastBlock, cb) {
 
 			modules.blockchain.accounts.undoMerging({
 				publicKey: oldLastBlock.delegate,
-				balance: {"LISK": fee}
+				balance: {"BEL": fee}
 			}, function (err) {
 				private.deleteBlock(oldLastBlock.id, function (err) {
 					if (err) {
@@ -121,8 +121,8 @@ private.verify = function (block, cb, scope) {
 		return cb("Invalid payload hash");
 	}
 
-	modules.api.blocks.getBlock(block.pointId, function (err, liskBlock) {
-		if (err || !liskBlock) {
+	modules.api.blocks.getBlock(block.pointId, function (err, belBlock) {
+		if (err || !belBlock) {
 			return cb(err || "Block not found");
 		}
 
@@ -592,8 +592,8 @@ Blocks.prototype.applyBlock = function (block, cb, scope) {
 					// Merge account and add fees
 					modules.blockchain.accounts.mergeAccountAndGet({
 						publicKey: block.delegate,
-						balance: {"LISK": fee},
-						u_balance: {"LISK": fee}
+						balance: {"BEL": fee},
+						u_balance: {"BEL": fee}
 					}, function (err) {
 						if (!err) {
 							(scope || private).lastBlock = block;

@@ -326,6 +326,7 @@ private.balanceSync = function (cb) {
 				}
 
 				modules.api.dapps.getBalanceTransactions(id, function (err, transactions) {
+					console.log('::::::::::::::::::;    modules.api.dapps.getBalanceTransactions ::::::::::::::  ', transactions);
 					if (err) {
 						return cb(err);
 					}
