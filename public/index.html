@@ -517,8 +517,11 @@ p{
                         if (ret.success) {
                             UserInfo = ret.response.account;
                             UserInfo.secret = secretKey;
-                            var bal = UserInfo.balance.BEL / 100000000 + '(BEL)';
-                            console.log('Profile', bal)
+                            var bal = [];
+                            Object.keys(UserInfo.u_balance).forEach(function(el){
+                                bal.push(UserInfo.u_balance[el] / 100000000 + '('+el+')');
+                            })
+                            bal = bal.join(', ');
                             $('#publicKey').html(UserInfo.publicKey);
                             $('#address').html(UserInfo.address);
                             $('#avlBal').html(bal);
