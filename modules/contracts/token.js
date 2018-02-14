@@ -57,8 +57,9 @@ Token.prototype.verify = function (trs, sender, cb, scope) {
 	if (!trs.asset.token.description) {
 		return cb("Invalid token description");
 	}
+	trs.asset.token.fund = parseInt(trs.asset.token.fund);
 	if (typeof trs.asset.token.fund != "number") {
-		return cb("Invalid tokek fund");
+		return cb("Invalid token fund");
 	}
 
 	var isToken = /^[A-Z]+$/g;

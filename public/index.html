@@ -138,10 +138,10 @@ p{
                         <li class="ul_font_size" value="blockchain_div_id">Blockchain</li>
                     </div>
                     <div class="col-md-3">
-                        <li class="ul_font_size" value="transation_div_id">Transaction</li>
+                        <li class="ul_font_size" value="transation_div_id">Transactions</li>
                     </div>
                     <div class="col-md-3">
-                        <li class="ul_font_size" value="delegate_div_id">Delegate</li>
+                        <li class="ul_font_size" value="token_div_id">Tokens</li>
                     </div>
                     <div class="col-md-3">
                         <li class="ul_font_size" value="profile_div_id">Profile</li>
@@ -219,9 +219,61 @@ p{
         <!-- <div id="send_div_id" style="display:none;">
             
         </div> -->
-        <div id="delegate_div_id">
-            Delegate
+        <div id="token_div_id">
+            <div>
+                <div class="table-responsive">
+                    <div class="send-btn-div">
+                        <button type="button" class="btn btn-primary send-btn" data-toggle="modal" data-target="#createToken">
+  Create
+</button>
+                    </div>
+                    <table class="table table-striped" id="tokenTable">
+                        <tr>
+                            <th class=".th-style">Name</th>
+                            <th class=".th-style">Fund</th>
+                            <th class=".th-style">Balance</th>
+                            <th class=".th-style">Owner</th>
+                        </tr>
+                    </table>
+                    
+                </div>
+            </div>
         </div>
+
+        <div class="modal fade" id="createToken" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Create Token</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="send-form">
+                <form >
+                    <div class="form-group">
+                        <label for="text">Token Name:</label>
+                        <input id="tokenName" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="pwd">Fund:</label>
+                        <input id="tokenFund" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="pwd">Description:</label>
+                        <input id="tokenDescription" type="text" class="form-control">
+                    </div>
+                </form>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary add-token-btn">Create</button>
+      </div>
+    </div> 
+  </div>
+</div>
         <div id="profile_div_id">
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
@@ -393,9 +445,9 @@ p{
                         {
                             onTransactions();
                         }
-                    case 'delegate_div_id':
+                    case 'token_div_id':
                         {
-
+                            onToken();
                         }
                     case 'profile_div_id':
                         {
@@ -430,8 +482,25 @@ p{
                 });
             }
 
-            function onDelegate() {
-
+            function onToken() {
+                $.ajax({
+                    type: 'GET',
+                    url: BASE_URL + '/tokens',
+                    dataType: 'json',
+                    success: function(ret) {
+                        if (ret.success) {
+                            var $table = $('#tokenTable');
+                            $table.find('tr:not(:first)').remove();
+                            var tokens = ret.response.tokens;
+                            for (var i in tokens) {
+                                var token = tokens[i];
+                                var fund = token.fund ? token.fund / 100000000 : 0;
+                                var tk = '<tr><td>' + token.tiker + '</td>' + '<td>' + fund + '</td>' + '<td>' + token.balance/100000000 + '</td>'+'<td>' + token.owner + '</td></tr>';
+                                $table.append(tk);
+                            }
+                        }
+                    }
+                });
             }
 
             function onProfile() {
@@ -511,6 +580,38 @@ p{
 
             })
 
+            $('.add-token-btn').click(function (){
+                var tokenName = $('#tokenName').val();
+                var tokenFund = $('#tokenFund').val();
+                var tokenDescription = $('#tokenDescription').val();
+                if(!tokenFund || tokenFund === '' || !tokenName || tokenName === '' || !tokenDescription || tokenDescription === ''){
+                    return;
+                }
+                if(isNaN(tokenFund)){
+                    return;
+                }
+                tokenFund = parseInt(tokenFund);
+                var payload = {
+                    secret: UserInfo.secret,
+                    name: tokenName,
+                    description: tokenDescription,
+                    fund: tokenFund*100000000,
+                }
+                $.ajax({
+                    type: 'PUT',
+                    url: BASE_URL + '/tokens',
+                    data: payload,
+                    dataType: 'json',
+                    success: function(ret) {
+                        if (ret.success) {
+                            $('#createToken').modal('hide');
+                            onToken();
+                        }
+                    }
+                });
+
+            })
+
             function timeFilter(time){
                 if(!time || time == 0){
                     return '-';
@@ -561,6 +662,9 @@ p{
                 return Math.floor(diffTime / 60 / 60 / 24 / 30 / 12) + ' years ago';
             }
         });
+
+
+    
     </script>
 </body>
 

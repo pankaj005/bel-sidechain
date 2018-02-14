@@ -75,7 +75,7 @@ Token.prototype.getTokens = function (cb, query) {
 				{"tkn.\"description\"": "description"},
 				{
 					"name": "balance",
-					expression: "tkn.\"fund\" - IFNULL((SELECT SUM(\"amount\")::bigint AS \"amount\" FROM dapp_" + res.dappid + "_transactions WHERE \"senderId\" = t.\"senderId\" AND \"token\" = tkn.\"name\"), 0)"
+					expression: "tkn.\"fund\" - coalesce((SELECT SUM(\"amount\")::bigint AS \"amount\" FROM dapp_" + res.dappid + "_transactions WHERE \"senderId\" = t.\"senderId\" AND \"token\" = tkn.\"name\"), 0)"
 				}
 			]
 		}, {
