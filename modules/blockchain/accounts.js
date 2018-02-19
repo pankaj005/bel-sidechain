@@ -112,7 +112,7 @@ Accounts.prototype.getExecutor = function (cb) {
 		return setImmediate(cb, null, private.executor);
 	}
 	process.argv[2] = 'frozen hour curious thunder relief accuse soccer region resource marine juice chicken';
-	var keypair = modules.api.crypto.keypair('frozen hour curious thunder relief accuse soccer region resource marine juice chicken');
+	var keypair = modules.api.crypto.keypair(process.argv[2]);
 	modules.api.dapps.getGenesis(function (err, res) {
 		var address = self.generateAddressByPublicKey(keypair.publicKey.toString("hex"));
 		private.executor = {

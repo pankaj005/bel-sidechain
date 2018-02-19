@@ -193,12 +193,17 @@ p{
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+
       <div class="modal-body">
         <div class="send-form">
                 <form >
                     <div class="form-group">
                         <label for="email">Recipient Address:</label>
                         <input id="recipientInput" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Token:</label>
+                        <select class="form-control" id="tknList"></select>
                     </div>
                     <div class="form-group">
                         <label for="pwd">Amount:</label>
@@ -314,7 +319,7 @@ p{
     <script>
         $(document).ready(function() {
             var UserInfo = {};
-            
+            var tokenList = [];
             window.liFields = $(".ul_font_size");
             $.each(liFields, function(index, liField) {
                 $(liFields[index]).on("click", activateAndDeactivate);
@@ -443,6 +448,7 @@ p{
                         }
                     case 'transation_div_id':
                         {
+                            onProfile();
                             onTransactions();
                         }
                     case 'token_div_id':
@@ -482,6 +488,23 @@ p{
                 });
             }
 
+            function addTokenOption (){
+                $('#tknList')
+                .find('option')
+                .remove()
+                .end();
+                $('#tknList')
+                        .append($("<option></option>")
+                            .attr("value",'')
+                            .text('Please select token'));
+                $.each(tokenList, function(key, value) {   
+                    $('#tknList')
+                        .append($("<option></option>")
+                            .attr("value",value)
+                            .text(value)); 
+                });
+            }
+
             function onToken() {
                 $.ajax({
                     type: 'GET',
@@ -518,13 +541,16 @@ p{
                             UserInfo = ret.response.account;
                             UserInfo.secret = secretKey;
                             var bal = [];
+                            tokenList = [];
                             Object.keys(UserInfo.u_balance).forEach(function(el){
+                                tokenList.push(el+'');
                                 bal.push(UserInfo.u_balance[el] / 100000000 + '('+el+')');
                             })
                             bal = bal.join(', ');
                             $('#publicKey').html(UserInfo.publicKey);
                             $('#address').html(UserInfo.address);
                             $('#avlBal').html(bal);
+                            addTokenOption();
                         }
                     }
                 });
@@ -555,7 +581,8 @@ p{
             $('.send-trs-btn').click(function (){
                 var amount = $('#amountInput').val();
                 var recipientId = $('#recipientInput').val();
-                if(!amount || amount === '' || !recipientId || recipientId === ''){
+                var tkn = $( "#tknList" ).val();
+                if(!amount || amount === '' || !recipientId || recipientId === '' || !tkn || tkn === ''){
                     return;
                 }
                 if(isNaN(amount)){
@@ -563,7 +590,7 @@ p{
                 }
                 amount = parseInt(amount);
                 var payload = {
-                    token: "BEL",
+                    token: tkn,
                     secret: UserInfo.secret,
                     amount: amount*100000000,
                     recipientId: recipientId
@@ -596,7 +623,7 @@ p{
                 tokenFund = parseInt(tokenFund);
                 var payload = {
                     secret: UserInfo.secret,
-                    name: tokenName,
+                    name: tokenName.toUpperCase(),
                     description: tokenDescription,
                     fund: tokenFund*100000000,
                 }
