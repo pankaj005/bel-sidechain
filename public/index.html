@@ -466,6 +466,65 @@ p{
                 $("#blockchain_div_id").show();
             }
 
+            function isCorrectValue(currency) {
+                var parts = String(currency).trim().split('.');
+                var amount = parts[0];
+                var fraction;
+
+                function error (message) {
+                    return false
+                }
+
+                if (amount == '') {
+                    return error('Amount can not be blank');
+                }
+
+                if (parts.length == 1) {
+                    // No fractional part
+                    fraction = '00000000';
+                } else if (parts.length == 2) {
+                    if (parts[1].length > 8) {
+                        return error('Amount must not have more than 8 decimal places');
+                    } else if (parts[1].length <= 8) {
+                        // Less than eight decimal places
+                        fraction = parts[1];
+                    } else {
+                        // Trim extraneous decimal places
+                        fraction = parts[1].substring(0, 8);
+                    }
+                } else {
+                    return error('Amount must have only one decimal point');
+                }
+
+                // Pad to eight decimal places
+                for (var i = fraction.length; i < 8; i++) {
+                    fraction += '0';
+                }
+
+                // Check for zero amount
+                if (amount == '0' && fraction == '00000000') {
+                    return error('Amount can not be zero');
+                }
+
+                // Combine whole with fractional part
+                var result = amount + fraction;
+
+                // In case there's a comma or something else in there.
+                // At this point there should only be numbers.
+                if (!/^\d+$/.test(result)) {
+                    return error('Amount contains non-numeric characters');
+                }
+
+                // Remove leading zeroes
+                result = result.replace(/^0+/, '');
+
+                return parseInt(result);
+            }
+
+            function convertAmount (currency) {
+                return isCorrectValue(currency);
+            }
+
             function onTransactions() {
                 $.ajax({
                     type: 'GET',
@@ -582,17 +641,16 @@ p{
                 var amount = $('#amountInput').val();
                 var recipientId = $('#recipientInput').val();
                 var tkn = $( "#tknList" ).val();
-                if(!amount || amount === '' || !recipientId || recipientId === '' || !tkn || tkn === ''){
+                
+                amount = convertAmount(amount);
+                
+                if(!amount || !recipientId || recipientId === '' || !tkn || tkn === ''){
                     return;
                 }
-                if(isNaN(amount)){
-                    return;
-                }
-                amount = parseFloat(amount);
                 var payload = {
                     token: tkn,
                     secret: UserInfo.secret,
-                    amount: amount*100000000,
+                    amount: amount,
                     recipientId: recipientId
                 }
                 $.ajax({
@@ -614,18 +672,19 @@ p{
                 var tokenName = $('#tokenName').val();
                 var tokenFund = $('#tokenFund').val();
                 var tokenDescription = $('#tokenDescription').val();
-                if(!tokenFund || tokenFund === '' || !tokenName || tokenName === '' || !tokenDescription || tokenDescription === ''){
+
+                tokenFund = convertAmount(tokenFund);
+
+                if(!tokenFund || !tokenName || tokenName === '' || !tokenDescription || tokenDescription === ''){
                     return;
                 }
-                if(isNaN(tokenFund)){
-                    return;
-                }
+                
                 tokenFund = parseFloat(tokenFund);
                 var payload = {
                     secret: UserInfo.secret,
                     name: tokenName.toUpperCase(),
                     description: tokenDescription,
-                    fund: tokenFund*100000000,
+                    fund: tokenFund,
                 }
                 $.ajax({
                     type: 'PUT',
