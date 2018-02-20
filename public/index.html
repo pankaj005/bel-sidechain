@@ -588,7 +588,7 @@ p{
                 if(isNaN(amount)){
                     return;
                 }
-                amount = parseInt(amount);
+                amount = parseFloat(amount);
                 var payload = {
                     token: tkn,
                     secret: UserInfo.secret,
@@ -620,7 +620,7 @@ p{
                 if(isNaN(tokenFund)){
                     return;
                 }
-                tokenFund = parseInt(tokenFund);
+                tokenFund = parseFloat(tokenFund);
                 var payload = {
                     secret: UserInfo.secret,
                     name: tokenName.toUpperCase(),
