@@ -236,7 +236,7 @@ p{
                         <tr>
                             <th class=".th-style">Name</th>
                             <th class=".th-style">Fund</th>
-                            <th class=".th-style">Balance</th>
+                            <th class=".th-style">Rate</th>
                             <th class=".th-style">Owner</th>
                         </tr>
                     </table>
@@ -264,6 +264,10 @@ p{
                     <div class="form-group">
                         <label for="pwd">Fund:</label>
                         <input id="tokenFund" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="pwd">Rate:</label>
+                        <input id="tokenRate" type="text" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="pwd">Description:</label>
@@ -532,21 +536,41 @@ p{
                     dataType: 'json',
                     success: function(ret) {
                         if (ret.success) {
+                            onConfirmedTransactions(ret.response || false)
+                            
+                        } else {
+                            onConfirmedTransactions(false);
+                        }
+                    }
+                });
+            }
+
+            function onConfirmedTransactions(unconfirmTrs) {
+                $.ajax({
+                    type: 'GET',
+                    url: BASE_URL + '/transactions/list?address'+UserInfo.address,
+                    dataType: 'json',
+                    success: function(ret) {
+                        if (ret.success) {
                             var $table = $('#trsTable');
                             $table.find('tr:not(:first)').remove();
                             console.log(ret)
-                            for (var i in ret.response) {
-                                console.log(ret)
-                                var trs = ret.response[i];
+                            var confirmTrsList = ret.response
+                            if(unconfirmTrs) {
+                                confirmTrsList = unconfirmTrs.concat(confirmTrsList);
+                            }
+                            for (var i in confirmTrsList) {
+                                var trs = confirmTrsList[i];
+                                var recipient = !trs.recipientId?'-':trs.recipientId
                                 var amount = trs.amount ? trs.amount / 100000000 : 0;
-                                var tr = '<tr><td>' + trs.id + '</td>' + '<td>' + trs.senderId + '</td>' + '<td>' + trs.recipientId + '</td>' + '<td>' + amount + '</td></tr>';
+                                var tr = '<tr><td>' + trs.id + '</td>' + '<td>' + trs.senderId + '</td>' + '<td>' + recipient + '</td>' + '<td>' + amount + '</td></tr>';
                                 $table.append(tr);
                             }
                         }
                     }
                 });
             }
-
+            
             function addTokenOption (){
                 $('#tknList')
                 .find('option')
@@ -574,10 +598,11 @@ p{
                             var $table = $('#tokenTable');
                             $table.find('tr:not(:first)').remove();
                             var tokens = ret.response.tokens;
+                            console.log(tokens)
                             for (var i in tokens) {
                                 var token = tokens[i];
                                 var fund = token.fund ? token.fund / 100000000 : 0;
-                                var tk = '<tr><td>' + token.tiker + '</td>' + '<td>' + fund + '</td>' + '<td>' + token.balance/100000000 + '</td>'+'<td>' + token.owner + '</td></tr>';
+                                var tk = '<tr><td>' + token.tiker + '</td>' + '<td>' + fund + '</td>' + '<td>' + token.rate + '</td>'+'<td>' + token.owner + '</td></tr>';
                                 $table.append(tk);
                             }
                         }
@@ -672,19 +697,21 @@ p{
                 var tokenName = $('#tokenName').val();
                 var tokenFund = $('#tokenFund').val();
                 var tokenDescription = $('#tokenDescription').val();
-
+                var tokenRate = $('#tokenRate').val();
                 tokenFund = convertAmount(tokenFund);
 
-                if(!tokenFund || !tokenName || tokenName === '' || !tokenDescription || tokenDescription === ''){
+                if(!tokenFund || !tokenRate || !tokenName || tokenName === '' || !tokenDescription || tokenDescription === ''){
                     return;
                 }
                 
                 tokenFund = parseFloat(tokenFund);
+                tokenRate = parseFloat(tokenRate);
                 var payload = {
                     secret: UserInfo.secret,
                     name: tokenName.toUpperCase(),
                     description: tokenDescription,
                     fund: tokenFund,
+                    rate: tokenRate
                 }
                 $.ajax({
                     type: 'PUT',

@@ -131,7 +131,7 @@
 			{
 				"name": "senderId",
 				"type": "String",
-				"length": 21,
+				"length": 22,
 				"not_null": true
 			},
 			{
@@ -143,7 +143,7 @@
 			{
 				"name": "recipientId",
 				"type": "String",
-				"length": 21
+				"length": 22
 			},
 			{
 				"name": "amount",
@@ -293,6 +293,11 @@
 				"name": "transactionId",
 				"type": "String",
 				"length": 21,
+				"not_null": true
+			},
+			{
+				"name": "rate",
+				"type": "BigInt",
 				"not_null": true
 			}
 		],

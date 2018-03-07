@@ -202,6 +202,35 @@ Transactions.prototype.getTransactions = function (cb, query) {
 	self.getUnconfirmedTransactionList(false, cb)
 }
 
+Transactions.prototype.list = function (cb, query) {
+	
+	query.limit = query.limit || 10;
+	query.offset = query.offset || 0;
+	
+	private.list(function (err, trsList){
+		setImmediate(cb, null, trsList || []);
+	}, query)
+}
+
+private.list = function (cb, query) {
+	
+	modules.api.sql.select({
+		table: "transactions",
+		condition: {
+			$or:[
+				{"senderId":query.address},
+				{"recipientId":query.address}
+			]
+		},
+		limit: query.limit,
+		offset: query.offset,
+		fields: ["id","senderId","recipientId","amount","fee","timestamp","blockId","token"],
+		sort: {
+			timestamp: -1
+		}
+	}, cb);
+}
+
 Transactions.prototype.onMessage = function (query) {
 	switch (query.topic) {
 		case "transaction":
