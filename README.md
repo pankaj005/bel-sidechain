@@ -1,19 +1,17 @@
-# Belrium Dapps (Sidechain) SDK
+# Belrium Dapps(Sidechain)
 
-The official SDK for building dapps on the [Belrium](https://www.belfrics.in) decentralized application platform.
+[![Belrium](https://www.belrium.io/lib/img/logo.png)](https://www.belrium.io/)
 
-## Directory Structure
+Belrium sidechain is used for Belrium Token system. Belrium sidechain is the implementation of Smart Contracts in Belrium.
 
-  * **modules** - Contains the backend code of your dapp.
-  * **public** - Contains the frontend user interface of your dapp.
-  * **blockchain.json** - JSON file describing the SQL database schema. You will need this if you want to store any data within your dapp.
-  * **config.json** - JSON file containing your dapp's configuration data. By default this file defines a list of peers.
-  * **genesis.json** - JSON file containing important information about your dapp's genesis block.
-  * **index.js** - JavaScript file used to start your dapp.
-  * **modules.full.json** - JSON file containing a list of defined modules, required by **index.js**.
-  * **routes.json** - JSON file defining the HTTP routes of every endpoint in your dapp's API.
+### Getting Start
 
+  - Clone the bel-sidechain code
+     ```sh
+      $ git clone https://github.com/pankaj005/bel-sidechain.git
+    ```
+ - Modify sidechain UI according to own requirement. To modify UI code go to public folder put UI inside public folder.
+- Put the modified code in cloud (ex. git, google drive, s3 etc).
+- Create the application in Belrium Mainchain and provide the modified code URL o application, So that sidechain can install and deployed into the your Mainchain network.  
+- After install and launch the application (Sidechain), you can access it at `http://<YOUR_DOMAIN>/dapps/<applicationId>` 
 
-## Authors
-
-- Pankaj K. Yadav <pankaj.kumar@oodlestechnologies.com>
